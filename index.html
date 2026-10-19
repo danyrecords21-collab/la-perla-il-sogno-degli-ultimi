@@ -21,8 +21,21 @@
         /* Paletti Legno */
         .paletto-3d { width: 6px; height: 15px; background-color: #5d4037; border: 1px solid #2d1f1b; border-radius: 2px; position: absolute; transform: translateZ(15px) rotateX(-55deg); transform-origin: bottom center; box-shadow: 2px 2px 3px rgba(0,0,0,0.3); z-index: 10; }
         
-        /* Grafica dei Pannelli di Rete Ferroviaria Grigio/Argento */
-        .rete-3d { width: 12px; height: 10px; background: rgba(180, 186, 190, 0.4); border: 1px dashed #78909c; position: absolute; transform: translateZ(10px) rotateX(-55deg); transform-origin: bottom center; box-shadow: 1px 1px 2px rgba(0,0,0,0.2); z-index: 5; }
+        /* RETE COLOR FERRO ANTRACITE (Altissima Visibilità) */
+        .rete-3d { 
+            width: 12px; 
+            height: 16px; 
+            background-color: transparent;
+            /* Crea una griglia scura incrociata fitta ad alto contrasto */
+            background-image: linear-gradient(0deg, #263238 2px, transparent 2px), linear-gradient(90deg, #263238 2px, transparent 2px);
+            background-size: 4px 4px;
+            border-left: 3px solid #263238;
+            border-right: 3px solid #263238;
+            position: absolute; 
+            transform: translateZ(16px) rotateX(-55deg); 
+            transform-origin: bottom center;
+            z-index: 95; /* Spinge la rete visivamente DAVANTI e SOPRA ai paletti */
+        }
         
         /* Il Cancello in Legno */
         .cancello-3d { width: 55px; height: 16px; background: repeating-linear-gradient(90deg, #5d4037, #5d4037 6px, #3e2723 6px, #3e2723 10px); border: 2px solid #2d1f1b; position: absolute; top: -4px; left: 45%; transform: translateZ(16px) rotateX(-55deg); transform-origin: bottom center; border-radius: 1px; box-shadow: 2px 2px 4px rgba(0,0,0,0.4); z-index: 99; }
@@ -78,13 +91,13 @@
                 <h3 style="margin: 0; font-size: 15px; text-transform: uppercase;">Aggiorna Cantiere</h3>
                 <div class="gruppo-pulsanti">
                     <h4 style="margin: 0 0 5px 0; color: #a5d6a7; font-size: 13px;">🐕 STRUTTURA CANI:</h4>
-                    <button class="btn-game" onclick="eseguiPiantamento('paletti_cani', 5)">🔨 Pianta i paletti CANI</button>
+                    <button class="btn-game" onclick="eseguiPiantamento('paletti_cani', 5)">🔨 Pianta i paletti CANI che hai acquistato</button>
                     <button class="btn-game" style="background-color:#78909c; color:#fff;" onclick="eseguiPiantamento('rete_cani', 5)">⛓️ Stendi la rete CANI</button>
                     <button class="btn-game" style="background-color:#03a9f4; color:#fff;" onclick="eseguiPiantamento('cancello_cani', 1)">🚪 Monta il cancello CANI</button>
                 </div>
                 <div class="gruppo-pulsanti" style="background: rgba(0,0,0,0.15);">
-                    <h4 style="margin: 0 0 5px 0; color: #90caf9; font-size: 13px;">🐎 STRUTTURA CAVALLI:</h4>
-                    <button class="btn-game" onclick="eseguiPiantamento('paletti_cavalli', 5)">🔨 Pianta i paletti CAVALLI</button>
+                    <h4 style="margin: 0 0 5px 0; color: #90caf9; font-size: 13px;">🐎 STRUTTURA AREA CAVALLI:</h4>
+                    <button class="btn-game" onclick="eseguiPiantamento('paletti_cavalli', 5)">🔨 Pianta i paletti CAVALLI che hai acquistato</button>
                     <button class="btn-game" style="background-color:#78909c; color:#fff;" onclick="eseguiPiantamento('rete_cavalli', 5)">⛓️ Stendi la rete CAVALLI</button>
                     <button class="btn-game" style="background-color:#03a9f4; color:#fff;" onclick="eseguiPiantamento('cancello_cavalli', 1)">🚪 Monta il cancello CAVALLI</button>
                 </div>
@@ -92,9 +105,7 @@
         </div>
     </div>
     <script>
-        localStorage.clear(); // Reset automatico per accogliere il nuovo livello di rete pulito
         const maxValore = 200;
-        
         function calcolaPerimetro200() {
             let coordinate = [];
             for(let x=3.5; x<=44; x+=1.64) { coordinate.push({x: x, y: 3.5}); }
@@ -106,30 +117,34 @@
         }
         const mappaPerimetro = calcolaPerimetro200();
         
-        let caniP = 90; let caniR = 0; let caniC = false;
-        let cavalliP = 0; let cavalliR = 0; let cavalliC = false;
+        let caniP = parseInt(localStorage.getItem('f3d_cani_p')) || 90;
+        let caniR = parseInt(localStorage.getItem('f3d_cani_r')) || 0;
+        let caniC = localStorage.getItem('f3d_cani_c') === 'true';
+        let cavalliP = parseInt(localStorage.getItem('f3d_cavalli_p')) || 0;
+        let cavalliR = parseInt(localStorage.getItem('f3d_cavalli_r')) || 0;
+        let cavalliC = localStorage.getItem('f3d_cavalli_c') === 'true';
         
         const queryParams = new URLSearchParams(window.location.search);
         if (queryParams.get('status') === 'success') {
             const item = queryParams.get('item');
-            if (item === 'paletti_cani') { caniP += 5; if(caniP > maxValore) caniP = maxValore; }
-            else if (item === 'rete_cani') { caniR += 5; if(caniR > maxValore) caniR = maxValore; }
-            else if (item === 'cancello_cani') { caniC = true; }
-            else if (item === 'paletti_cavalli') { cavalliP += 5; if(cavalliP > maxValore) cavalliP = maxValore; }
-            else if (item === 'rete_cavalli') { cavalliR += 5; if(cavalliR > maxValore) cavalliR = maxValore; }
-            else if (item === 'cancello_cavalli') { cavalliC = true; }
+            if (item === 'paletti_cani') { caniP += 5; if(caniP > maxValore) caniP = maxValore; localStorage.setItem('f3d_cani_p', caniP); }
+            else if (item === 'rete_cani') { caniR += 5; if(caniR > maxValore) caniR = maxValore; localStorage.setItem('f3d_cani_r', caniR); }
+            else if (item === 'cancello_cani') { caniC = true; localStorage.setItem('f3d_cani_c', true); }
+            else if (item === 'paletti_cavalli') { cavalliP += 5; if(cavalliP > maxValore) cavalliP = maxValore; localStorage.setItem('f3d_cavalli_p', cavalliP); }
+            else if (item === 'rete_cavalli') { cavalliR += 5; if(cavalliR > maxValore) cavalliR = maxValore; localStorage.setItem('f3d_cavalli_r', cavalliR); }
+            else if (item === 'cancello_cavalli') { cavalliC = true; localStorage.setItem('f3d_cavalli_c', true); }
             window.history.replaceState({}, document.title, window.location.pathname);
         }
         
         disegnaMondo3D();
         
         function eseguiPiantamento(tipo, quantita) {
-            if(tipo === 'paletti_cani') { caniP += quantita; if(caniP > maxValore) caniP = maxValore; }
-            else if(tipo === 'rete_cani') { caniR += quantita; if(caniR > maxValore) caniR = maxValore; }
-            else if(tipo === 'cancello_cani') { caniC = true; }
-            else if(tipo === 'paletti_cavalli') { cavalliP += quantita; if(cavalliP > maxValore) cavalliP = maxValore; }
-            else if(tipo === 'rete_cavalli') { cavalliR += quantita; if(cavalliR > maxValore) cavalliR = maxValore; }
-            else if(tipo === 'cancello_cavalli') { cavalliC = true; }
+            if(tipo === 'paletti_cani') { caniP += quantita; if(caniP > maxValore) caniP = maxValore; localStorage.setItem('f3d_cani_p', caniP); }
+            else if(tipo === 'rete_cani') { caniR += quantita; if(caniR > maxValore) caniR = maxValore; localStorage.setItem('f3d_cani_r', caniR); }
+            else if(tipo === 'cancello_cani') { caniC = true; localStorage.setItem('f3d_cani_c', true); }
+            else if(tipo === 'paletti_cavalli') { cavalliP += quantita; if(cavalliP > maxValore) cavalliP = maxValore; localStorage.setItem('f3d_cavalli_p', cavalliP); }
+            else if(tipo === 'rete_cavalli') { cavalliR += quantita; if(cavalliR > maxValore) cavalliR = maxValore; localStorage.setItem('f3d_cavalli_r', cavalliR); }
+            else if(tipo === 'cancello_cavalli') { cavalliC = true; localStorage.setItem('f3d_cavalli_c', true); }
             disegnaMondo3D();
         }
         
@@ -137,7 +152,6 @@
             document.getElementById('campo-cani').innerHTML = "";
             document.getElementById('campo-cavalli').innerHTML = "";
             
-            // --- CANI ---
             document.getElementById('lbl-cani-p').innerText = caniP;
             document.getElementById('lbl-cani-r').innerText = caniR;
             document.getElementById('lbl-cani-m').innerText = (maxValore - caniP) + (maxValore - caniR);
@@ -156,7 +170,6 @@
                 document.getElementById('lbl-cani-c').innerText = "MONTATO 🚪"; document.getElementById('lbl-cani-c').style.color = "#4caf50";
             }
             
-            // --- CAVALLI ---
             document.getElementById('lbl-cavalli-p').innerText = cavalliP;
             document.getElementById('lbl-cavalli-r').innerText = cavalliR;
             document.getElementById('lbl-cavalli-m').innerText = (maxValore - cavalliP) + (maxValore - cavalliR);
