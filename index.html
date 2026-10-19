@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fattoria Solidale 3D - Rifugio La Perla</title>
+    <title>Cantiere 3D - Rifugio La Perla</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -19,36 +19,40 @@
             font-size: 20px;
             font-weight: bold;
             box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            letter-spacing: 1px;
         }
         .game-zone {
             max-width: 950px;
             margin: 20px auto;
             background: #252e27;
-            padding: 20px;
+            padding: 25px;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.6);
         }
-        h2 { margin: 10px 0 2px 0; color: #a5d6a7; font-size: 20px; text-transform: uppercase; }
-        .subtitle { color: #90a4ae; font-size: 13px; margin-bottom: 25px; }
+        .sezione-lotto {
+            margin-bottom: 60px; /* Evita qualsiasi sovrapposizione tra i terreni */
+            padding-bottom: 20px;
+            border-bottom: 1px solid #38453b;
+        }
+        h2 { margin: 10px 0 2px 0; color: #a5d6a7; font-size: 22px; text-transform: uppercase; }
+        .subtitle { color: #90a4ae; font-size: 13px; margin-bottom: 40px; }
 
-        /* SCENA 3D ISOMETRICA */
+        /* SCENA 3D ISOMETRICA DISTANZIATA */
         .scena-3d {
-            perspective: 1000px;
+            perspective: 1200px;
             width: 100%;
-            height: 240px;
+            height: 280px;
             position: relative;
-            margin: 10px auto 30px auto;
+            margin: 20px auto;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Terreno inclinato per effetto 3D reale */
+        /* Terreno inclinato isometrico */
         .terreno-isometrico {
-            width: 500px;
-            height: 260px;
-            background-color: #55a665;
+            width: 460px;
+            height: 240px;
+            background-color: #4caf50;
             background-image: radial-gradient(rgba(255,255,255,0.15) 10%, transparent 11%);
             background-size: 15px 15px;
             border: 4px solid #1b5e20;
@@ -56,32 +60,31 @@
             transform: rotateX(55deg) rotateZ(-45deg);
             transform-style: preserve-3d;
             position: relative;
-            box-shadow: 15px 15px 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.3);
-            transition: transform 0.3s;
+            box-shadow: 20px 20px 35px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.3);
         }
 
-        /* Paletti microscopici in scala 3D (200 totali) */
+        /* Paletti in scala 3D */
         .paletto-3d {
-            width: 5px;
-            height: 5px;
+            width: 6px;
+            height: 6px;
             background-color: #6d4c41;
             border: 1px solid #3e2723;
             border-radius: 50%;
             position: absolute;
-            transform: translateZ(5px);
+            transform: translateZ(6px);
             box-shadow: 1px 1px 2px rgba(0,0,0,0.6);
         }
 
         /* Il Cancello in Prospettiva */
         .cancello-3d {
             width: 45px;
-            height: 6px;
+            height: 8px;
             background-color: #ff5722;
             border: 1px solid #bf360c;
             position: absolute;
-            top: -2px;
+            top: -3px;
             left: 45%;
-            transform: translateZ(8px);
+            transform: translateZ(10px);
             border-radius: 1px;
             box-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
@@ -89,17 +92,17 @@
         /* Pannelli di controllo e Barre */
         .dashboard-info {
             background: #1c221e;
-            padding: 12px;
+            padding: 15px;
             border-radius: 8px;
             border: 1px solid #2e3831;
             max-width: 600px;
-            margin: 0 auto 20px auto;
+            margin: 20px auto 0 auto;
         }
         .bar-container {
             width: 100%;
             background-color: #0f1310;
             border-radius: 10px;
-            height: 20px;
+            height: 22px;
             overflow: hidden;
             margin-top: 5px;
             border: 1px solid #333;
@@ -109,7 +112,7 @@
             height: 100%;
             color: #000;
             font-weight: bold;
-            line-height: 20px;
+            line-height: 22px;
             font-size: 13px;
             text-align: center;
             transition: width 0.6s ease;
@@ -117,30 +120,30 @@
         .stats-grid {
             display: flex;
             justify-content: space-around;
-            font-size: 13px;
+            font-size: 14px;
             margin-top: 8px;
             color: #cfd8dc;
         }
 
-        /* Pannello Pulsanti Interattivi */
+        /* Pannello Pulsanti Dinamici */
         .control-panel {
             background: #2e7d32;
-            padding: 15px;
+            padding: 20px;
             border-radius: 8px;
-            margin-top: 25px;
+            margin-top: 30px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         .btn-game {
             background-color: #ff9800;
             color: #000000;
             border: none;
-            padding: 12px 25px;
-            font-size: 15px;
+            padding: 14px 30px;
+            font-size: 16px;
             font-weight: bold;
-            border-radius: 20px;
+            border-radius: 25px;
             cursor: pointer;
-            margin: 5px;
-            box-shadow: 0 3px 5px rgba(0,0,0,0.4);
+            margin: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
             transition: background 0.2s, transform 0.1s;
         }
         .btn-game:hover { background-color: #ffb74d; }
@@ -154,48 +157,52 @@
     <div class="game-zone">
 
         <!-- 🐶 CANI -->
-        <h2>🐶 1. Area Cani (12.000 mq)</h2>
-        <div class="subtitle">Obiettivo: 200 Paletti + 1 Cancello</div>
-        
-        <div class="scena-3d">
-            <div id="campo-cani" class="terreno-isometrico"></div>
-        </div>
-
-        <div class="dashboard-info">
-            <div class="bar-container">
-                <div id="barra-cani" class="bar-fill">45%</div>
+        <div class="sezione-lotto">
+            <h2>🐶 1. Area Cani (12.000 mq)</h2>
+            <div class="subtitle">Obiettivo: 200 Paletti + 1 Cancello</div>
+            
+            <div class="scena-3d">
+                <div id="campo-cani" class="terreno-isometrico"></div>
             </div>
-            <div class="stats-grid">
-                <div>Paletti: <strong id="lbl-cani-p">90</strong> / 200</div>
-                <div>Mancanti: <strong id="lbl-cani-m">110</strong></div>
-                <div>Cancello: <strong id="lbl-cani-c" style="color:#ff5722;">ASSENTE</strong></div>
+
+            <div class="dashboard-info">
+                <div class="bar-container">
+                    <div id="barra-cani" class="bar-fill">45%</div>
+                </div>
+                <div class="stats-grid">
+                    <div>Paletti: <strong id="lbl-cani-p">90</strong> / 200</div>
+                    <div>Mancanti: <strong id="lbl-cani-m">110</strong></div>
+                    <div>Cancello: <strong id="lbl-cani-c" style="color:#ff5722;">ASSENTE</strong></div>
+                </div>
             </div>
         </div>
 
         <!-- 🐎 CAVALLI -->
-        <h2>🐎 2. Area Cavalli (12.000 mq)</h2>
-        <div class="subtitle">Obiettivo: 200 Paletti + 1 Cancello</div>
-        
-        <div class="scena-3d">
-            <div id="campo-cavalli" class="terreno-isometrico"></div>
+        <div class="sezione-lotto" style="border-bottom: none;">
+            <h2>🐎 2. Area Cavalli (12.000 mq)</h2>
+            <div class="subtitle">Obiettivo: 200 Paletti + 1 Cancello</div>
+            
+            <div class="scena-3d">
+                <div id="campo-cavalli" class="terreno-isometrico"></div>
+            </div>
+
+            <div class="dashboard-info">
+                <div class="bar-container">
+                    <div id="barra-cavalli" class="bar-fill">0%</div>
+                </div>
+                <div class="stats-grid">
+                    <div>Paletti: <strong id="lbl-cavalli-p">0</strong> / 200</div>
+                    <div>Mancanti: <strong id="lbl-cavalli-m">200</strong></div>
+                    <div>Cancello: <strong id="lbl-cavalli-c" style="color:#ff5722;">ASSENTE</strong></div>
+                </div>
+            </div>
         </div>
 
-        <div class="dashboard-info">
-            <div class="bar-container">
-                <div id="barra-cavalli" class="bar-fill">0%</div>
-            </div>
-            <div class="stats-grid">
-                <div>Paletti: <strong id="lbl-cavalli-p">0</strong> / 200</div>
-                <div>Mancanti: <strong id="lbl-cavalli-m">200</strong></div>
-                <div>Cancello: <strong id="lbl-cavalli-c" style="color:#ff5722;">ASSENTE</strong></div>
-            </div>
-        </div>
-
-        <!-- 🎮 PULSANTI DI CONTROLLO DEL GIOCO -->
+        <!-- 🎮 PULSANTI DI INTERAZIONE -->
         <div class="control-panel">
-            <h3 style="margin: 0 0 10px 0; font-size: 16px;">Pannello di Controllo Gestione Materiali:</h3>
-            <button class="btn-game" onclick="simulaMateriali('paletti_cani')">🔨 Monta 5 Paletti Cani (€2,50)</button>
-            <button class="btn-game" style="background-color:#03a9f4; color:#fff;" onclick="simulaMateriali('cancello_cani')">🚪 Monta Cancello Cani (€2,00)</button>
+            <h3 style="margin: 0 0 15px 0; font-size: 18px; color: #fff;">Pannello di Aggiornamento Cantiere:</h3>
+            <button class="btn-game" onclick="eseguiPiantamento('paletti_cani', 5)">🔨 Pianta i paletti che hai acquistato</button>
+            <button class="btn-game" style="background-color:#03a9f4; color:#fff;" onclick="eseguiPiantamento('cancello_cani', 1)">🚪 Monta il cancello che hai acquistato</button>
         </div>
 
     </div>
@@ -203,13 +210,12 @@
     <script>
         const maxPaletti = 200;
 
-        // Genera esattamente 200 posizioni precise sul perimetro lasciando lo spazio al centro in alto
+        // Genera esattamente 200 posizioni precise sul perimetro inclinato
         function calcolaPerimetro200() {
             let coordinate = [];
-            // Lato Superiore Sinistra (da 2% a 44%)
+            // Lato Superiore Sinistra
             for(let x=2; x<=44; x+=(42/25)) { coordinate.push({x: x, y: 2}); }
-            // Spazio Cancello vuoto (da 45 a 55)
-            // Lato Superiore Destra (da 56% a 98%)
+            // Lato Superiore Destra (Spazio per il cancello lasciato vuoto in mezzo)
             for(let x=56; x<=98; x+=(42/25)) { coordinate.push({x: x, y: 2}); }
             // Lato Destro Scendendo
             for(let y=5; y<=95; y+=(90/50)) { coordinate.push({x: 98, y: y}); }
@@ -228,43 +234,33 @@
         let cavalliP = parseInt(localStorage.getItem('saved_cavalli_p')) || 0;
         let cavalliC = localStorage.getItem('saved_cavalli_c') === 'true';
 
-        // Legge l'ordine automatico in arrivo da Stripe
+        // LETTURA AUTOMATICA DA STRIPE CON MOLTIPLICATORE DI IMPORTO
         const queryParams = new URLSearchParams(window.location.search);
-        const tipoAcquisto = queryParams.get('item');
-
-        if (queryParams.get('status') === 'success' && tipoAcquisto) {
-            if (tipoAcquisto === 'paletti_cani') {
-                caniP += 5; if(caniP > maxPaletti) caniP = maxPaletti;
+        if (queryParams.get('status') === 'success') {
+            const item = queryParams.get('item');
+            const importoSpeso = parseFloat(queryParams.get('amount')) || 2.50; // Se non specificato calcola 2.50€
+            
+            if (item === 'paletti_cani') {
+                // Calcola quanti pacchetti da 5 ha comprato (2.50€ = 5 paletti, 5.00€ = 10 paletti, ecc.)
+                let moltiplicatore = Math.round(importoSpeso / 2.50);
+                if (moltiplicatore < 1) moltiplicatore = 1;
+                let palettiDaAggiungere = moltiplicatore * 5;
+                
+                caniP += palettiDaAggiungere;
+                if(caniP > maxPaletti) caniP = maxPaletti;
                 localStorage.setItem('saved_cani_p', caniP);
-            } else if (tipoAcquisto === 'cancello_cani') {
+            } else if (item === 'cancello_cani') {
                 caniC = true;
                 localStorage.setItem('saved_cani_c', true);
             }
             window.history.replaceState({}, document.title, window.location.pathname);
         }
 
-        // Rendering grafico iniziale
+        // Mostra i terreni pronti
         disegnaMondo3D();
 
-        function simulaMateriali(tipo) {
+        function eseguiPiantamento(tipo, quantita) {
             if(tipo === 'paletti_cani') {
-                caniP += 5; if(caniP > maxPaletti) caniP = maxPaletti;
+                caniP += quantita; if(caniP > maxPaletti) caniP = maxPaletti;
                 localStorage.setItem('saved_cani_p', caniP);
             } else if(tipo === 'cancello_cani') {
-                caniC = true;
-                localStorage.setItem('saved_cani_c', true);
-            }
-            disegnaMondo3D();
-        }
-
-        function disegnaMondo3D() {
-            document.getElementById('campo-cani').innerHTML = "";
-            document.getElementById('campo-cavalli').innerHTML = "";
-
-            // --- AGGIORNA AREA CANI ---
-            document.getElementById('lbl-cani-p').innerText = caniP;
-            document.getElementById('lbl-cani-m').innerText = maxPaletti - caniP;
-            let perCani = Math.round((caniP / maxPaletti) * 100);
-            document.getElementById('barra-cani').style.width = perCani + '%';
-            document.getElementById('barra-cani').innerText = perCani + '%';
-
