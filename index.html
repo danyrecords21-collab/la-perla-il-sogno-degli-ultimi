@@ -8,24 +8,36 @@
         body { font-family: 'Segoe UI', sans-serif; background-color: #ffffff; color: #333333; margin: 0; padding: 0; text-align: center; }
         .header-bar { background-color: #1b5e20; color: white; padding: 15px; font-size: 20px; font-weight: bold; }
         .game-zone { max-width: 950px; margin: 20px auto; background: #ffffff; padding: 25px; }
-        .sezione-lotto { margin-bottom: 90px; padding-bottom: 20px; border-bottom: 1px solid #cccccc; position: relative; }
+        
+        .sezione-lotto { margin-bottom: 120px; padding-bottom: 40px; border-bottom: 1px solid #cccccc; position: relative; }
         h2 { margin: 10px 0 2px 0; color: #1b5e20; font-size: 24px; }
-        .subtitle { color: #555555; font-size: 14px; margin-bottom: 30px; }
+        .subtitle { color: #555555; font-size: 14px; margin-bottom: 20px; }
         
-        /* SCENA 3D ISOMETRICA INGRANDITA E REAZIONARIA */
-        .scena-3d { perspective: 1200px; width: 100%; height: 320px; display: flex; justify-content: center; align-items: center; position: relative; margin-bottom: 40px; }
-        .terreno-isometrico { width: 560px; height: 280px; background-color: #4caf50; border: 4px solid #1b5e20; border-radius: 8px; transform: rotateX(55deg) rotateZ(-45deg); transform-style: preserve-3d; position: relative; box-shadow: 20px 20px 35px rgba(0,0,0,0.3); }
+        .scena-3d { perspective: 1200px; width: 100%; height: 260px; display: flex; justify-content: center; align-items: center; position: relative; margin-bottom: 60px; }
+        .terreno-isometrico { width: 440px; height: 220px; background-color: #4caf50; border: 4px solid #1b5e20; border-radius: 8px; transform: rotateX(55deg) rotateZ(-45deg); transform-style: preserve-3d; position: relative; box-shadow: 20px 20px 35px rgba(0,0,0,0.3); }
         
-        .paletto-3d { width: 7px; height: 7px; background-color: #6d4c41; border: 1px solid #3e2723; border-radius: 50%; position: absolute; transform: translateZ(6px); }
-        .cancello-3d { width: 50px; height: 8px; background-color: #ff5722; border: 1px solid #bf360c; position: absolute; top: -3px; left: 45%; transform: translateZ(10px); }
+        /* Paletti verticali slanciati verso l'alto */
+        .paletto-3d { 
+            width: 5px; 
+            height: 14px; /* Aumentata l'altezza verticale per farli spuntare dal prato */
+            background-color: #5d4037; /* Marrone legno scuro */
+            border: 1px solid #2d1f1b; 
+            border-radius: 2px; 
+            position: absolute; 
+            transform: translateZ(14px) rotateX(-55deg); /* Ruotati rispetto all'asse per restare dritti in piedi */
+            transform-origin: bottom center;
+            box-shadow: 2px 2px 3px rgba(0,0,0,0.4); 
+        }
         
-        .dashboard-info { background: #f5f5f5; padding: 15px; border-radius: 8px; border: 1px solid #dddddd; max-width: 600px; margin: 35px auto 0 auto; color: #333333; position: relative; z-index: 10; }
+        .cancello-3d { width: 45px; height: 8px; background-color: #ff5722; border: 1px solid #bf360c; position: absolute; top: -3px; left: 45%; transform: translateZ(10px); }
+        
+        .dashboard-info { background: #f5f5f5; padding: 15px; border-radius: 8px; border: 1px solid #dddddd; max-width: 600px; margin: 60px auto 0 auto; color: #333333; position: relative; z-index: 99; }
         .bar-container { width: 100%; background-color: #dddddd; border-radius: 10px; height: 22px; overflow: hidden; margin-top: 5px; }
         .bar-fill { background: linear-gradient(90deg, #2e7d32, #4caf50); height: 100%; color: white; font-weight: bold; line-height: 22px; font-size: 13px; text-align: center; transition: width 0.4s ease; }
         .stats-grid { display: flex; justify-content: space-around; font-size: 14px; margin-top: 8px; }
         
         .control-panel { background: #1b5e20; color: white; padding: 20px; border-radius: 8px; margin-top: 40px; }
-        .gruppo-pulsanti { margin: 15px 0; padding: 10px; border-radius: 6px; background: rgba(255,255,255,0.1); }
+        .gruppo-pulsanti { margin: 15px 0; padding: 15px; border-radius: 8px; background: rgba(255,255,255,0.1); }
         .btn-game { background-color: #ff9800; color: #000; border: none; padding: 14px 30px; font-size: 16px; font-weight: bold; border-radius: 25px; cursor: pointer; margin: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
     </style>
 </head>
@@ -63,18 +75,18 @@
             </div>
         </div>
 
-        <!-- 🎮 PANNELLO DI INTERAZIONE SEPARATO -->
+        <!-- 🎮 PANNELLO COMANDI -->
         <div class="control-panel">
             <h3 style="margin: 0; font-size: 18px;">Pannello di Aggiornamento Cantiere:</h3>
             
             <div class="gruppo-pulsanti">
-                <h4 style="margin: 0; color: #a5d6a7;">🐕 STRUTTURA AREA CANI:</h4>
+                <h4 style="margin: 0 0 10px 0; color: #a5d6a7;">🐕 STRUTTURA AREA CANI:</h4>
                 <button class="btn-game" onclick="eseguiPiantamento('paletti_cani', 5)">🔨 Pianta i paletti CANI che hai acquistato</button>
                 <button class="btn-game" style="background-color:#03a9f4; color:#fff;" onclick="eseguiPiantamento('cancello_cani', 1)">🚪 Monta il cancello CANI che hai acquistato</button>
             </div>
 
             <div class="gruppo-pulsanti" style="background: rgba(0,0,0,0.2);">
-                <h4 style="margin: 0; color: #90caf9;">🐎 STRUTTURA AREA CAVALLI:</h4>
+                <h4 style="margin: 0 0 10px 0; color: #90caf9;">🐎 STRUTTURA AREA CAVALLI:</h4>
                 <button class="btn-game" onclick="eseguiPiantamento('paletti_cavalli', 5)">🔨 Pianta i paletti CAVALLI che hai acquistato</button>
                 <button class="btn-game" style="background-color:#03a9f4; color:#fff;" onclick="eseguiPiantamento('cancello_cavalli', 1)">🚪 Monta il cancello CAVALLI che hai acquistato</button>
             </div>
@@ -83,6 +95,7 @@
     </div>
     <script>
         const maxPaletti = 200;
+        
         function calcolaPerimetro200() {
             let coordinate = [];
             for(let x=2; x<=44; x+=1.68) { coordinate.push({x: x, y: 2}); }
@@ -94,24 +107,24 @@
         }
         const mappaPerimetro = calcolaPerimetro200();
         
-        let caniP = parseInt(localStorage.getItem('saved_cani_p2')) || 90;
-        let caniC = localStorage.getItem('saved_cani_c2') === 'true';
-        let cavalliP = parseInt(localStorage.getItem('saved_cavalli_p2')) || 0;
-        let cavalliC = localStorage.getItem('saved_cavalli_c2') === 'true';
+        let caniP = parseInt(localStorage.getItem('final_cani_p')) || 90;
+        let caniC = localStorage.getItem('final_cani_c') === 'true';
+        let cavalliP = parseInt(localStorage.getItem('final_cavalli_p')) || 0;
+        let cavalliC = localStorage.getItem('final_cavalli_c') === 'true';
         
         const queryParams = new URLSearchParams(window.location.search);
         if (queryParams.get('status') === 'success') {
             const item = queryParams.get('item');
             if (item === 'paletti_cani') {
                 caniP += 5; if(caniP > maxPaletti) caniP = maxPaletti;
-                localStorage.setItem('saved_cani_p2', caniP);
+                localStorage.setItem('final_cani_p', caniP);
             } else if (item === 'cancello_cani') {
-                caniC = true; localStorage.setItem('saved_cani_c2', true);
+                caniC = true; localStorage.setItem('final_cani_c', true);
             } else if (item === 'paletti_cavalli') {
                 cavalliP += 5; if(cavalliP > maxPaletti) cavalliP = maxPaletti;
-                localStorage.setItem('saved_saved_cavalli_p2', cavalliP);
+                localStorage.setItem('final_cavalli_p', cavalliP);
             } else if (item === 'cancello_cavalli') {
-                cavalliC = true; localStorage.setItem('saved_cavalli_c2', true);
+                cavalliC = true; localStorage.setItem('final_cavalli_c', true);
             }
             window.history.replaceState({}, document.title, window.location.pathname);
         }
@@ -121,14 +134,14 @@
         function eseguiPiantamento(tipo, quantita) {
             if(tipo === 'paletti_cani') {
                 caniP += quantita; if(caniP > maxPaletti) caniP = maxPaletti;
-                localStorage.setItem('saved_cani_p2', caniP);
+                localStorage.setItem('final_cani_p', caniP);
             } else if(tipo === 'cancello_cani') {
-                caniC = true; localStorage.setItem('saved_cani_c2', true);
+                caniC = true; localStorage.setItem('final_cani_c', true);
             } else if(tipo === 'paletti_cavalli') {
                 cavalliP += quantita; if(cavalliP > maxPaletti) cavalliP = maxPaletti;
-                localStorage.setItem('saved_cavalli_p2', cavalliP);
+                localStorage.setItem('final_cavalli_p', cavalliP);
             } else if(tipo === 'cancello_cavalli') {
-                cavalliC = true; localStorage.setItem('saved_cavalli_c2', true);
+                cavalliC = true; localStorage.setItem('final_cavalli_c', true);
             }
             disegnaMondo3D();
         }
@@ -137,7 +150,7 @@
             document.getElementById('campo-cani').innerHTML = "";
             document.getElementById('campo-cavalli').innerHTML = "";
             
-            // CANI
+            // --- CANI ---
             document.getElementById('lbl-cani-p').innerText = caniP;
             document.getElementById('lbl-cani-m').innerText = maxPaletti - caniP;
             let perCani = Math.round((caniP / maxPaletti) * 100);
@@ -148,10 +161,3 @@
             }
             if(caniC) {
                 let el = document.createElement('div'); el.className = 'cancello-3d'; document.getElementById('campo-cani').appendChild(el);
-                document.getElementById('lbl-cani-c').innerText = "MONTATO 🚪"; document.getElementById('lbl-cani-c').style.color = "#4caf50";
-            }
-            
-            // CAVALLI
-            document.getElementById('lbl-cavalli-p').innerText = cavalliP;
-            document.getElementById('lbl-cavalli-m').innerText = maxPaletti - cavalliP;
-            let perCavalli = Math.round((cavalliP / maxPaletti) * 100);
