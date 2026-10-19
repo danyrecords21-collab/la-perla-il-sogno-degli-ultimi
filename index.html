@@ -1,3 +1,79 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cantiere 3D - Rifugio La Perla</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #ffffff; color: #333333; margin: 0; padding: 0; overflow-x: hidden; }
+        .header-bar { background-color: #1b5e20; color: white; padding: 15px; font-size: 20px; font-weight: bold; text-align: center; }
+        .main-layout { display: flex; max-width: 1200px; margin: 20px auto; padding: 0 20px; gap: 30px; box-sizing: border-box; }
+        .game-zone { flex: 3; display: flex; flex-direction: column; gap: 50px; }
+        .sidebar { flex: 1; max-width: 280px; min-width: 250px; }
+        .sezione-lotto { background: #ffffff; padding: 10px; position: relative; text-align: center; }
+        h2 { margin: 0; color: #1b5e20; font-size: 24px; text-align: left; }
+        .subtitle { color: #555555; font-size: 14px; margin-bottom: 20px; text-align: left; }
+        .scena-3d { perspective: 1200px; width: 100%; height: 320px; display: flex; justify-content: center; align-items: center; position: relative; }
+        .terreno-isometrico { width: 560px; height: 280px; background-color: #4caf50; border: 4px solid #1b5e20; border-radius: 8px; transform: rotateX(55deg) rotateZ(-45deg); transform-style: preserve-3d; position: relative; box-shadow: 20px 20px 35px rgba(0,0,0,0.25); }
+        .paletto-3d { width: 6px; height: 15px; background-color: #5d4037; border: 1px solid #2d1f1b; border-radius: 2px; position: absolute; transform: translateZ(15px) rotateX(-55deg); transform-origin: bottom center; box-shadow: 2px 2px 3px rgba(0,0,0,0.3); }
+        .cancello-3d { width: 55px; height: 8px; background-color: #ff5722; border: 1px solid #bf360c; position: absolute; top: -3px; left: 45%; transform: translateZ(12px); border-radius: 1px; box-shadow: 2px 2px 4px rgba(0,0,0,0.4); }
+        .dashboard-info { background: #f5f5f5; padding: 15px; border-radius: 8px; border: 1px solid #dddddd; width: 95%; margin: 30px auto 0 auto; color: #333333; position: relative; z-index: 99; }
+        .bar-container { width: 100%; background-color: #dddddd; border-radius: 10px; height: 22px; overflow: hidden; margin-top: 5px; }
+        .bar-fill { background: linear-gradient(90deg, #2e7d32, #4caf50); height: 100%; color: white; font-weight: bold; line-height: 22px; font-size: 13px; text-align: center; transition: width 0.4s ease; }
+        .stats-grid { display: flex; justify-content: space-around; font-size: 14px; margin-top: 8px; }
+        .control-panel { background: #1b5e20; color: white; padding: 15px; border-radius: 12px; box-shadow: 0 6px 12px rgba(0,0,0,0.15); position: sticky; top: 20px; text-align: center; }
+        .gruppo-pulsanti { margin: 15px 0; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-game { background-color: #ff9800; color: #000; border: none; padding: 12px 15px; width: 95%; font-size: 13px; font-weight: bold; border-radius: 20px; cursor: pointer; margin: 6px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: background 0.2s; }
+        .btn-game:hover { background-color: #ffb74d; }
+    </style>
+</head>
+<body>
+    <div class="header-bar">CANTIERE INTERATTIVO 3D - RIFUGIO LA PERLA</div>
+    <div class="main-layout">
+        <div class="game-zone">
+            <div class="sezione-lotto">
+                <h2>🐶 1. Area Cani (12.000 mq)</h2>
+                <div class="subtitle">Obiettivo: 200 Paletti + 1 Cancello</div>
+                <div class="scena-3d"><div id="campo-cani" class="terreno-isometrico"></div></div>
+                <div class="dashboard-info">
+                    <div class="bar-container"><div id="barra-cani" class="bar-fill">45%</div></div>
+                    <div class="stats-grid">
+                        <div>Paletti: <strong id="lbl-cani-p">90</strong> / 200</div>
+                        <div>Mancanti: <strong id="lbl-cani-m">110</strong></div>
+                        <div>Cancello: <strong id="lbl-cani-c" style="color:#ff5722; font-weight:bold;">ASSENTE</strong></div>
+                    </div>
+                </div>
+            </div>
+            <div class="sezione-lotto" style="border-bottom: none; margin-bottom: 10px;">
+                <h2>🐎 2. Area Cavalli (12.000 mq)</h2>
+                <div class="subtitle">Obiettivo: 200 Paletti + 1 Cancello</div>
+                <div class="scena-3d"><div id="campo-cavalli" class="terreno-isometrico"></div></div>
+                <div class="dashboard-info">
+                    <div class="bar-container"><div id="barra-cavalli" class="bar-fill" style="width:0%;">0%</div></div>
+                    <div class="stats-grid">
+                        <div>Paletti: <strong id="lbl-cavalli-p">0</strong> / 200</div>
+                        <div>Mancanti: <strong id="lbl-cavalli-m">200</strong></div>
+                        <div>Cancello: <strong id="lbl-cavalli-c" style="color:#ff5722; font-weight:bold;">ASSENTE</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar">
+            <div class="control-panel">
+                <h3 style="margin: 0; font-size: 15px; text-transform: uppercase;">Aggiorna Cantiere</h3>
+                <div class="gruppo-pulsanti">
+                    <h4 style="margin: 0 0 5px 0; color: #a5d6a7; font-size: 13px;">🐕 STRUTTURA CANI:</h4>
+                    <button class="btn-game" onclick="eseguiPiantamento('paletti_cani', 5)">🔨 Pianta i paletti CANI che hai acquistato</button>
+                    <button class="btn-game" style="background-color:#03a9f4; color:#fff;" onclick="eseguiPiantamento('cancello_cani', 1)">🚪 Monta il cancello CANI</button>
+                </div>
+                <div class="gruppo-pulsanti" style="background: rgba(0,0,0,0.15);">
+                    <h4 style="margin: 0 0 5px 0; color: #90caf9; font-size: 13px;">🐎 STRUTTURA CAVALLI:</h4>
+                    <button class="btn-game" onclick="eseguiPiantamento('paletti_cavalli', 5)">🔨 Pianta i paletti CAVALLI che hai acquistato</button>
+                    <button class="btn-game" style="background-color:#03a9f4; color:#fff;" onclick="eseguiPiantamento('cancello_cavalli', 1)">🚪 Monta il cancello CAVALLI</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         const maxPaletti = 200;
         function calcolaPerimetro200() {
@@ -33,79 +109,6 @@
             else if(tipo === 'cancello_cani') { caniC = true; localStorage.setItem('f3d_cani_c', true); }
             else if(tipo === 'paletti_cavalli') { cavalliP += quantita; if(cavalliP > maxPaletti) cavalliP = maxPaletti; localStorage.setItem('f3d_cavalli_p', cavalliP); }
             else if(tipo === 'cancello_cavalli') { cavalliC = true; localStorage.setItem('f3d_cavalli_c', true); }
-            disegnaMondo3D();
-        }
-        
-        function disegnaMondo3D() {
-            document.getElementById('campo-cani').innerHTML = "";
-            document.getElementById('campo-cavalli').innerHTML = "";
-            
-            document.getElementById('lbl-cani-p').innerText = caniP;
-            document.getElementById('lbl-cani-m').innerText = maxPaletti - caniP;
-            let perCani = Math.round((caniP / maxPaletti) * 100);
-            document.getElementById('barra-cani').style.width = perCani + '%';
-            document.getElementById('barra-cani').innerText = perCani + '%';
-            for (let i = 0; i < Math.min(caniP, mappaPerimetro.length); i++) {
-                let el = document.createElement('div'); el.className = 'paletto-3d'; el.style.left = mappaPerimetro[i].x + '%'; el.style.top = mappaPerimetro[i].y + '%'; document.getElementById('campo-cani').appendChild(el);
-            }
-            if(caniC) {
-                let el = document.createElement('div'); el.className = 'cancello-3d'; document.getElementById('campo-cani').appendChild(el);
-                document.getElementById('lbl-cani-c').innerText = "MONTATO 🚪"; document.getElementById('lbl-cani-c').style.color = "#4caf50";
-            }
-            
-            document.getElementById('lbl-cavalli-p').innerText = cavalliP;
-            document.getElementById('lbl-cavalli-m').innerText = maxPaletti - cavalliP;
-            let perCavalli = Math.round((cavalliP / maxPaletti) * 100);
-            document.getElementById('barra-cavalli').style.width = perCavalli + '%';
-            document.getElementById('barra-cavalli').innerText = perCavalli + '%';
-            for (let i = 0; i < Math.min(cavalliP, mappaPerimetro.length); i++) {
-                let el = document.createElement('div'); el.className = 'paletto-3d'; el.style.left = mappaPerimetro[i].x + '%'; el.style.top = mappaPerimetro[i].y + '%'; document.getElementById('campo-cavalli').appendChild(el);
-            }
-            if(cavalliC) {
-                let el = document.createElement('div'); el.className = 'cancello-3d'; document.getElementById('campo-cavalli').appendChild(el);
-                document.getElementById('lbl-cavalli-c').innerText = "MONTATO 🚪"; document.getElementById('lbl-cavalli-c').style.color = "#4caf50";
-            }
-        }
-    </script>
-</body>
-</html>
-    <script>
-        const maxPaletti = 200;
-        
-        function calcolaPerimetro200() {
-            let coordinate = [];
-            for(let x=3.5; x<=44; x+=1.64) { coordinate.push({x: x, y: 3.5}); }
-            for(let x=56; x<=96.5; x+=1.64) { coordinate.push({x: x, y: 3.5}); }
-            for(let y=5; y<=95; y+=1.8) { coordinate.push({x: 96.5, y: y}); }
-            for(let x=96.5; x>=3.5; x-=1.88) { coordinate.push({x: x, y: 94.5}); }
-            for(let y=95; y>=5; y-=1.8) { coordinate.push({x: 3.5, y: y}); }
-            return coordinate;
-        }
-        const mappaPerimetro = calcolaPerimetro200();
-        
-        // Rinominati i cassetti di memoria (da v2 a v_real) per svuotare i vecchi test di collaudo e ripartire da 90 fissi
-        let caniP = parseInt(localStorage.getItem('v_real_cani_p')) || 90;
-        let caniC = localStorage.getItem('v_real_cani_c') === 'true';
-        let cavalliP = parseInt(localStorage.getItem('v_real_cavalli_p')) || 0;
-        let cavalliC = localStorage.getItem('v_real_cavalli_c') === 'true';
-        
-        const queryParams = new URLSearchParams(window.location.search);
-        if (queryParams.get('status') === 'success') {
-            const item = queryParams.get('item');
-            if (item === 'paletti_cani') { caniP += 5; if(caniP > maxPaletti) caniP = maxPaletti; localStorage.setItem('v_real_cani_p', caniP); }
-            else if (item === 'cancello_cani') { caniC = true; localStorage.setItem('v_real_cani_c', true); }
-            else if (item === 'paletti_cavalli') { cavalliP += 5; if(cavalliP > maxPaletti) cavalliP = maxPaletti; localStorage.setItem('v_real_cavalli_p', cavalliP); }
-            else if (item === 'cancello_cavalli') { cavalliC = true; localStorage.setItem('v_real_cavalli_c', true); }
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }
-        
-        disegnaMondo3D();
-        
-        function eseguiPiantamento(tipo, quantita) {
-            if(tipo === 'paletti_cani') { caniP += quantita; if(caniP > maxPaletti) caniP = maxPaletti; localStorage.setItem('v_real_cani_p', caniP); }
-            else if(tipo === 'cancello_cani') { caniC = true; localStorage.setItem('v_real_cani_c', true); }
-            else if(tipo === 'paletti_cavalli') { cavalliP += quantita; if(cavalliP > maxPaletti) cavalliP = maxPaletti; localStorage.setItem('v_real_cavalli_p', cavalliP); }
-            else if(tipo === 'cancello_cavalli') { cavalliC = true; localStorage.setItem('v_real_cavalli_c', true); }
             disegnaMondo3D();
         }
         
