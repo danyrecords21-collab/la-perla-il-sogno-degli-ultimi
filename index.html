@@ -21,19 +21,20 @@
         /* Paletti Legno */
         .paletto-3d { width: 6px; height: 15px; background-color: #5d4037; border: 1px solid #2d1f1b; border-radius: 2px; position: absolute; transform: translateZ(15px) rotateX(-55deg); transform-origin: bottom center; box-shadow: 2px 2px 3px rgba(0,0,0,0.3); z-index: 10; }
         
-        /* RETE COLOR FERRO ANTRACITE (Altissima Visibilità) */
+        /* RETE ORO OCRA AD ALTA VISIBILITÀ (Disegnata sopra i paletti) */
         .rete-3d { 
-            width: 12px; 
-            height: 16px; 
+            width: 10px; 
+            height: 17px; 
             background-color: transparent;
-            /* Crea una griglia scura incrociata fitta ad alto contrasto */
-            background-image: linear-gradient(0deg, #263238 2px, transparent 2px), linear-gradient(90deg, #263238 2px, transparent 2px);
-            background-size: 4px 4px;
-            border-left: 3px solid #263238;
-            border-right: 3px solid #263238;
+            /* Crea una bellissima griglia incrociata giallo ocra brillante intenso */
+            background-image: linear-gradient(0deg, #ffb300 2px, transparent 2px), linear-gradient(90deg, #ffb300 2px, transparent 2px);
+            background-size: 3px 3px;
+            border-left: 2px solid #ff9100;
+            border-right: 2px solid #ff9100;
             position: absolute; 
             transform: translateZ(16px) rotateX(-55deg); 
             transform-origin: bottom center;
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
             z-index: 95; /* Spinge la rete visivamente DAVANTI e SOPRA ai paletti */
         }
         
